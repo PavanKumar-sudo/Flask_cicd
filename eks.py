@@ -1,9 +1,13 @@
-from kubernetes import client, config
-from kubernetes.client.exceptions import ApiException
 import os
 import time
-from dotenv import load_dotenv
-load_dotenv()
+
+# Only load .env locally (not inside GitHub Actions)
+if not os.getenv("GITHUB_ACTIONS"):
+    from dotenv import load_dotenv
+    load_dotenv()
+
+from kubernetes import client, config
+from kubernetes.client.exceptions import ApiException
 
 # Load configuration depending on environment
 if os.getenv('KUBERNETES_SERVICE_HOST'):
@@ -81,7 +85,7 @@ for _ in range(20):
     ingress = svc.status.load_balancer.ingress
     if ingress:
         lb_host = ingress[0].hostname or ingress[0].ip
-        print(f" Your app is available at: http://{lb_host}:{PORT}/")
+        print(f"Your app is available at: http://{lb_host}:{PORT}/")
         break
     time.sleep(10)
 else:

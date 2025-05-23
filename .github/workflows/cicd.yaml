@@ -8,13 +8,6 @@ jobs:
   test-build-deploy:
     runs-on: ubuntu-latest
 
-    env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-      EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
-      FLASK_IMAGE: ${{ secrets.ECR_REPOSITORY }}:latest
-      FLASK_PORT: "5000"
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -55,24 +48,29 @@ jobs:
 
     - name: Log in to Amazon ECR
       run: |
-        aws ecr get-login-password --region $AWS_REGION | \
-        docker login --username AWS --password-stdin $ECR_REPOSITORY
+        aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
+        docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
 
     - name: Build and Push Docker image to ECR
       run: |
-        docker build --platform linux/amd64 -t $ECR_REPOSITORY:latest .
-        docker push $ECR_REPOSITORY:latest
+        docker build --platform linux/amd64 -t ${{ secrets.ECR_REPOSITORY }}:latest .
+        docker push ${{ secrets.ECR_REPOSITORY }}:latest
 
     - name: Update kubeconfig for EKS
       run: |
         aws eks update-kubeconfig \
-          --region $AWS_REGION \
-          --name $EKS_CLUSTER_NAME
+          --region ${{ secrets.AWS_REGION }} \
+          --name ${{ secrets.EKS_CLUSTER_NAME }}
 
     - name: Deploy to EKS using eks.py
       env:
-        FLASK_IMAGE: ${{ env.FLASK_IMAGE }}
-        FLASK_PORT: ${{ env.FLASK_PORT }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+        FLASK_IMAGE: ${{ secrets.ECR_REPOSITORY }}:latest
+        FLASK_PORT: "5000"
       run: |
         source venv/bin/activate
         python eks.py
