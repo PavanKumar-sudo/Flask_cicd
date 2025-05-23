@@ -13,6 +13,8 @@ class TestSystemMonitoring(unittest.TestCase):
         mock_cpu_percent.return_value = 90.0
         mock_mem = MagicMock()
         mock_mem.percent = 20.0
+        mock_mem.used = 2 * 1024**3  # 2 GB
+        mock_mem.total = 4 * 1024**3  # 4 GB
         mock_virtual_memory.return_value = mock_mem
 
         response = self.client.get("/")
@@ -25,6 +27,8 @@ class TestSystemMonitoring(unittest.TestCase):
         mock_cpu_percent.return_value = 30.0
         mock_mem = MagicMock()
         mock_mem.percent = 90.0
+        mock_mem.used = 3 * 1024**3  # 3 GB
+        mock_mem.total = 4 * 1024**3  # 4 GB
         mock_virtual_memory.return_value = mock_mem
 
         response = self.client.get("/")
@@ -37,6 +41,8 @@ class TestSystemMonitoring(unittest.TestCase):
         mock_cpu_percent.return_value = 20.0
         mock_mem = MagicMock()
         mock_mem.percent = 30.0
+        mock_mem.used = 1 * 1024**3  # 1 GB
+        mock_mem.total = 4 * 1024**3  # 4 GB
         mock_virtual_memory.return_value = mock_mem
 
         response = self.client.get("/")
