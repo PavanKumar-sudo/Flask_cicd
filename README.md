@@ -44,9 +44,9 @@ This project is a lightweight system monitoring web application built using Flas
 
 The frontend is rendered through a Flask Jinja2 template - index.html and displays two beautifully styled interactive gauge charts using Plotly — one each for CPU and memory usage. The gauges are color-coded to reflect normal, warning, and critical thresholds, making it visually intuitive to monitor system health. If CPU or memory exceeds the 50% threshold, the dashboard alerts the user in red with a clear message. And also we will get the alert box in UI. The web app is responsive, and the gauges are centrally aligned for clarity and ease of use.
 
-Note: It calculate the CPU and memory of System where you running for example if you running on your local it calculates your local system if running on Kuberentes it calculate only that pod CPU and memory not entire pod
+Note: It calculate the CPU and memory of System where you running for example if you running on your local it calculates your local system if running on Kuberentes it calculate only that pod CPU and memory not entire pod in the cluster.
 
-First, I check my app is running on the local machine on the port 5000 by doing this step.
+First, I check app is running on the local machine on the port 5000 by doing this step.
 
 ```bash
 # 1. Create a virtual environment
@@ -94,7 +94,7 @@ Output:
 ![image](https://github.com/user-attachments/assets/cfd254b2-c734-4b92-86d3-53bef5152e64)
 
  
-## pushing the my docker image into ecr.
+## push docker image into ecr.
 
 The ecr.py script automates the entire process of working with Amazon ECR (Elastic Container Registry). It first takes a repository name as a command-line argument and attempts to create a new ECR repository in the us-east-1 region using the AWS credentials provided via environment variables. If the repository already exists, it gracefully retrieves its URI. The script then builds a local Docker image from the current directory using that repository name and tags it with the correct ECR URI. This ensures the image is properly formatted and ready to be uploaded to AWS.
 
@@ -212,7 +212,7 @@ eksctl delete cluster --name my-first-eks-cluster --region us-east-1
 #it will delete your ecr repository
 aws ecr delete-repository --repository-name <your-repo-name> --force --region <your-region>
 ```
-## 🔮 Future Considerations
+## Future Considerations
 
 To enhance scalability, security, and production-readiness, the following improvements are planned:
 
