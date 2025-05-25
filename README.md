@@ -227,26 +227,25 @@ To enhance scalability, security, and production-readiness, the following improv
 
 4. **Automated Alerts and Notifications**  
    Add support for email, Slack, or AWS SNS alerts when resource thresholds are breached, enabling proactive incident response.
-5. **Created a Rule for ecr to delete old tag**
-   ```bash
+5. **Created a Rule for ECR to delete old tags**
+   ```json
    {
-  "rules": [
-    {
-      "rulePriority": 1,
-      "description": "Delete untagged images older than 7 days",
-      "selection": {
-        "tagStatus": "untagged",
-        "countType": "sinceImagePushed",
-        "countUnit": "days",
-        "countNumber": 7
-      },
-      "action": {
-        "type": "expire"
-      }
-    }
-  ]
-}
-```
+     "rules": [
+       {
+         "rulePriority": 1,
+         "description": "Delete untagged images older than 7 days",
+         "selection": {
+           "tagStatus": "untagged",
+           "countType": "sinceImagePushed",
+           "countUnit": "days",
+           "countNumber": 7
+         },
+         "action": {
+           "type": "expire"
+         }
+       }
+     ]
+   }
 ---
 
 
